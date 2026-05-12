@@ -33,14 +33,12 @@ BER = zeros(size(SNRdB));
 
 rng(42);        % Фиксированный seed для воспроизводимости
 
-fprintf('========================================\n');
 fprintf('OFDM with MATLAB Rayleigh Channel\n');
 fprintf('Modulation: %d-QAM\n', M);
 fprintf('Sample rate: %.2f MHz\n', Fs/1e6);
 fprintf('FFT size: %d, CP length: %d\n', Nfft, Ng);
 fprintf('Used subcarriers: %d, Pilots: %d, Data: %d\n', Nused, length(pilot_indices), length(data_indices));
 fprintf('Pilot spacing: %d\n', pilot_spacing);
-fprintf('========================================\n\n');
 
 %% Основной цикл по SNR
 for i_snr = 1:length(SNRdB)
