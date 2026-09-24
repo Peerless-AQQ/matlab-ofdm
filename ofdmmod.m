@@ -36,7 +36,7 @@ Ndata_4 = length(data_indices_4);
 Npilot_4 = length(pilot_indices_4);
 
 % SNR параметры
-SNRdB = 0:5:50;
+SNRdB = 0:5:45;
 nSNR = length(SNRdB);
 
 % Предварительное выделение массивов
@@ -508,18 +508,11 @@ for m = 1:3
 end
 
 grid on;
-xlabel('SNR на поднесущую, Es/N0 (dB)', 'FontSize', 12);
-ylabel('BER', 'FontSize', 12);
-title('График 1: LS оценка с разными интерполяциями', 'FontSize', 14);
-legend('Location', 'southwest', 'FontSize', 8);
+xlabel('SNR на поднесущую, Es/N0 (dB)', 'FontSize', 16);
+ylabel('BER', 'FontSize', 16);
+title('График 1: LS оценка с разными интерполяциями', 'FontSize', 16);
+legend('Location', 'southwest', 'FontSize', 16);
 axis([min(SNRdB) max(SNRdB) 1e-6 1]);
-
-text(min(SNRdB)+1, 2e-6, ...
-    sprintf(['― : шаг 16 (%d пилотов, %d данных)\n', ...
-             '- - : шаг 4 (%d пилотов, %d данных)\n', ...
-             'Diversity order = %d (ограничен %d лучами)'], ...
-             Npilot_16, Ndata_16, Npilot_4, Ndata_4, num_paths, num_paths), ...
-    'FontSize', 9, 'BackgroundColor', 'w', 'EdgeColor', 'k');
 
 %% ГРАФИК 2: LS vs MMSE (шаг 16, с плавным вырождением)
 figure('Position', [150, 150, 900, 650]);
@@ -544,10 +537,10 @@ if any(valid_mmse)
 end
 
 grid on;
-xlabel('SNR на поднесущую, Es/N0 (dB)', 'FontSize', 12);
-ylabel('BER', 'FontSize', 12);
-title('График 2: LS vs MMSE (шаг 16, плавное вырождение)', 'FontSize', 14);
-legend('Location', 'southwest', 'FontSize', 10);
+xlabel('SNR на поднесущую, Es/N0 (dB)', 'FontSize', 16);
+ylabel('BER', 'FontSize', 16);
+title('График 2: LS vs MMSE (шаг 16, плавное вырождение)', 'FontSize', 16);
+legend('Location', 'southwest', 'FontSize', 16);
 axis([min(SNRdB) max(SNRdB) 1e-6 1]);
 
 text(min(SNRdB)+1, 2e-6, ...
