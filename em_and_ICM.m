@@ -50,7 +50,7 @@ function [Y, info] = generate_signal_model(params)
     end
 
     s(pilot_pos) = const(randi(M_qpsk, 1, numel(pilot_pos)));
-    s_dmrs = s(pilot_pos);   % известные приёмнику символы
+    s_dmrs = s(pilot_pos);
 
     N = sqrt(Pn/2) * (randn(Nr,K) + 1i*randn(Nr,K));
 
