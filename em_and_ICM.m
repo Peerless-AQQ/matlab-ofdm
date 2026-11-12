@@ -27,9 +27,9 @@ fprintf('Число DMRS: %d,  Data+Control RE: %d\n\n', ...
 %% МОНТЕ-КАРЛО
 nSIR = numel(SIR_list);
 SINR_ideal_all = nan(Nreal, nSIR);
-SINR_em_all    = nan(Nreal, nSIR);
-SER_ideal_all  = nan(Nreal, nSIR);
-SER_em_all     = nan(Nreal, nSIR);
+SINR_em_all = nan(Nreal, nSIR);
+SER_ideal_all = nan(Nreal, nSIR);
+SER_em_all = nan(Nreal, nSIR);
 
 for r = 1:Nreal
     params = params_base;
@@ -147,8 +147,8 @@ function [Y, info] = generate_signal_model(params)
     Pi = Ps * 10^(-SIR_dB/10);
     Pn = (Ps/Nr) * 10^(-SNR_dB/10);
 
-    h = sqrt(Ps/Nr)       * (randn(Nr,1)  + 1i*randn(Nr,1))  / sqrt(2);
-    G = sqrt(Pi/(Ni*Nr))  * (randn(Nr,Ni) + 1i*randn(Nr,Ni)) / sqrt(2);
+    h = sqrt(Ps/Nr) * (randn(Nr,1) + 1i*randn(Nr,1)) / sqrt(2);
+    G = sqrt(Pi/(Ni*Nr)) * (randn(Nr,Ni) + 1i*randn(Nr,Ni)) / sqrt(2);
 
     s = zeros(1, K);
     s(data_idx) = const_data(randi(M_data, 1, nD));
@@ -164,10 +164,10 @@ function [Y, info] = generate_signal_model(params)
             I_sym = sqrt(1/2) * (randn(Ni,K) + 1i*randn(Ni,K));
     end
 
-    N     = sqrt(Pn/2) * (randn(Nr,K) + 1i*randn(Nr,K));
+    N = sqrt(Pn/2) * (randn(Nr,K) + 1i*randn(Nr,K));
     Y_sig = h * s;
     Y_int = G * I_sym;
-    Y     = Y_sig + Y_int + N;
+    Y  = Y_sig + Y_int + N;
 
     R_in_true = G*G' + Pn*eye(Nr);
 
@@ -242,7 +242,7 @@ function [h_em, R_in] = em_channel_icm(Y, dmrs_idx, s_dmrs, ...
     [Nr, K] = size(Y);
     nP = numel(dmrs_idx);
 
-    Yp   = Y(:, dmrs_idx);
+    Yp = Y(:, dmrs_idx);
     h_ls = (Yp * s_dmrs') / (s_dmrs * s_dmrs');
 
     Rp = zeros(Nr, Nr);
@@ -260,22 +260,22 @@ function [h_em, R_in] = em_channel_icm(Y, dmrs_idx, s_dmrs, ...
 
     const_row = const_data(:).';
     const_col = const_data(:);
-    abs_c2    = abs(const_row).^2;
-    conj_c    = conj(const_row);
+    abs_c2 = abs(const_row).^2;
+    conj_c = conj(const_row);
 
     for iter = 1:maxIter
         % E-шаг
-        RinvY  = R_in \ Y;
+        RinvY = R_in \ Y;
         yRinvy = real(sum(conj(Y).*RinvY, 1)).';
-        hRinv  = (R_in \ h_em)';
+        hRinv = (R_in \ h_em)';
         hRinvY = hRinv * Y;
         hRinvh = real(hRinv * h_em);
 
         cross = -2 * real( conj(const_row) .* hRinvY.' );
-        quad  = hRinvh * abs_c2;
-        Dist  = yRinvy + cross + quad;
+        quad = hRinvh * abs_c2;
+        Dist = yRinvy + cross + quad;
 
-        Dist  = Dist - min(Dist, [], 2); % Защита от переполнения exp()
+        Dist = Dist - min(Dist, [], 2); % Защита от переполнения exp()
         Ppost = exp(-Dist);
         Ppost = Ppost ./ sum(Ppost, 2);
 
@@ -319,8 +319,8 @@ function [h_em, R_in] = em_channel_icm(Y, dmrs_idx, s_dmrs, ...
 
         Ni_hat = determine_Ni(lam, K, Nr);
         Lam_Ni = diag(lam(1:Ni_hat));
-        V_Ni   = Vq(:, 1:Ni_hat);
-        beta   = max((sum(lam) - sum(lam(1:Ni_hat))) / (Nr - Ni_hat), 1e-9);
+        V_Ni = Vq(:, 1:Ni_hat);
+        beta = max((sum(lam) - sum(lam(1:Ni_hat))) / (Nr - Ni_hat), 1e-9);
         R_new  = V_Ni * (Lam_Ni - beta*eye(Ni_hat)) * V_Ni' + beta*eye(Nr);
         R_new  = (R_new + R_new') / 2;
 
